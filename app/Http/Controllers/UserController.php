@@ -42,6 +42,7 @@ class UserController extends Controller
         $data = $request->all();
         if ($request->hasFile('picture')) 
            $data['picture'] = $request->file('picture')->store('public/pictures');
+           
         $data['password'] = 'password';
         
         User::create($data);
