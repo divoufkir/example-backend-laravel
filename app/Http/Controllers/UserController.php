@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
+use Log;
 class UserController extends Controller
 {
     /**
@@ -28,7 +28,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -40,8 +40,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        
-        $data['picture'] = $request->file('picture')->store('public/pictures');
+        if ($request->hasFile('picture')) 
+           $data['picture'] = $request->file('picture')->store('public/pictures');
         $data['password'] = 'password';
         
         User::create($data);
@@ -79,9 +79,15 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $user->update($request->all());
+        $data = $request->all();
+        if ($request->hasFile('picture')) 
+            $data['picture'] = $request->file('picture')->store('public/pictures'); 
 
-        return ['succes' => true];
+        $data['password'] = 'password';
+        $user->update($data);
+
+        return ['succes' => true]; 
+        
     }
 
     /**
